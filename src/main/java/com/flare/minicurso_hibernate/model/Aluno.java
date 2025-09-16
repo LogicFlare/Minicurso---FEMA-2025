@@ -29,8 +29,7 @@ public class Aluno {
 
     @OneToMany(
             mappedBy = "aluno", // → indica que o lado proprietário do relacionamento é o campo aluno da classe Emprestimo.
-            cascade = CascadeType.ALL, // → ajudam a gerenciar persistência e remoção automática.
-            orphanRemoval = true //
+            cascade = CascadeType.ALL // → ajudam a gerenciar persistência e remoção automática.
     )
     private List<Emprestimo> emprestimos = new ArrayList<>();
 }
