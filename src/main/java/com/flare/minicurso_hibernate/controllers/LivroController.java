@@ -1,9 +1,8 @@
 package com.flare.minicurso_hibernate.controllers;
 
-import com.flare.minicurso_hibernate.model.Livro;
+import com.flare.minicurso_hibernate.infra.model.Livro;
 import com.flare.minicurso_hibernate.service.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,7 @@ public class LivroController {
     private LivroService livroService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Livro> encontrar(UUID id) {
+    public ResponseEntity<Livro> encontrar(@PathVariable UUID id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(livroService.encontrar(id));
     }
@@ -30,7 +29,7 @@ public class LivroController {
                 .body(livroService.encontrarPorTitulo(titulo));
     }
 
-    @GetMapping
+    @GetMapping("/todos")
     public ResponseEntity<List<Livro>> listarTodos() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(livroService.listarTodos());
@@ -42,14 +41,14 @@ public class LivroController {
                 .body(livroService.listarTodosPorAutor(nomeAutor));
     }
 
-    @PostMapping
-    public ResponseEntity<Livro> criar(Livro data) {
+    @PostMapping("/criar")
+    public ResponseEntity<Livro> criar(@RequestBody Livro data) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(livroService.criar(data));
     }
 
-    @DeleteMapping
-    public ResponseEntity excluir(UUID id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity excluir(@PathVariable UUID id) {
         livroService.excluir(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .build();

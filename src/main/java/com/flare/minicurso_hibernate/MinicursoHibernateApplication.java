@@ -7,7 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MinicursoHibernateApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MinicursoHibernateApplication.class, args);
+
+        SpringApplication.run(MinicursoHibernateApplication.class, args);
+        System.out.println("Aplicação iniciada com sucesso!");
+        System.out.println("URL do swagger: http://localhost:8080/api/swagger-ui/index.html " );
 	}
 
 }

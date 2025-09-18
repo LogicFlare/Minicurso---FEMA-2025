@@ -1,4 +1,4 @@
-package com.flare.minicurso_hibernate.model;
+package com.flare.minicurso_hibernate.infra.model;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,7 +1,8 @@
 package com.flare.minicurso_hibernate.controllers;
 
-import com.flare.minicurso_hibernate.model.Emprestimo;
+import com.flare.minicurso_hibernate.infra.model.Emprestimo;
 import com.flare.minicurso_hibernate.service.EmprestimoService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,12 +23,12 @@ public class EmprestimoController {
     private EmprestimoService emprestimoService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Emprestimo> encontrar(UUID id) {
+    public ResponseEntity<Emprestimo> encontrar(@PathVariable UUID id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(emprestimoService.encontrar(id));
     }
 
-    @GetMapping
+    @GetMapping("/todos")
     public ResponseEntity<List<Emprestimo>> listarTodos() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(emprestimoService.listarTodos());
@@ -54,22 +55,22 @@ public class EmprestimoController {
                 .body(emprestimoService.encontrarPorMes(mes, ano));
     }
 
-    @PostMapping
-    public ResponseEntity<Emprestimo> criar(Emprestimo data) {
+    @PostMapping("/criar")
+    public ResponseEntity<Emprestimo> criar(@RequestBody Emprestimo data) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(emprestimoService.criar(data));
     }
 
-    @PostMapping
-    public ResponseEntity devolucao(UUID id) {
+    @PostMapping("/devolucao/{id}")
+    public ResponseEntity devolucao(@PathVariable UUID id) {
         emprestimoService.marcarDevolucao(id);
         return ResponseEntity.status(HttpStatus.OK)
                 .build();
     }
 
 
-    @DeleteMapping
-    public ResponseEntity excluir(UUID id) {
+    @DeleteMapping("/excluir/{id}")
+    public ResponseEntity excluir(@PathVariable UUID id) {
         emprestimoService.excluir(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .build();

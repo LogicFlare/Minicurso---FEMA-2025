@@ -1,6 +1,6 @@
 package com.flare.minicurso_hibernate.service;
 
-import com.flare.minicurso_hibernate.model.Emprestimo;
+import com.flare.minicurso_hibernate.infra.model.Emprestimo;
 import com.flare.minicurso_hibernate.repository.EmprestimoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +32,7 @@ public class EmprestimoService {
     }
 
     public Emprestimo criar(Emprestimo data) {
+
         Emprestimo emprestimo = new Emprestimo().builder()
                 .aluno(data.getAluno())
                 .livros(data.getLivros())

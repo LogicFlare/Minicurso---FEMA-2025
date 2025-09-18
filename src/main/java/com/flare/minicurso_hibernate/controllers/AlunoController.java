@@ -1,6 +1,8 @@
 package com.flare.minicurso_hibernate.controllers;
 
-import com.flare.minicurso_hibernate.model.Aluno;
+import com.flare.minicurso_hibernate.infra.dto.aluno.AlunoRequestDTO;
+import com.flare.minicurso_hibernate.infra.dto.aluno.AlunoResponseDTO;
+import com.flare.minicurso_hibernate.infra.model.Aluno;
 import com.flare.minicurso_hibernate.service.AlunoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,31 +20,31 @@ public class AlunoController {
     private AlunoService alunoService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Aluno> encontrar(UUID id) {
+    public ResponseEntity<AlunoResponseDTO> encontrar(@PathVariable UUID id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(alunoService.encontrar(id));
     }
 
     @GetMapping("/matricula/{matricula}")
-    public ResponseEntity<Aluno> encontrarPorMatricula(@PathVariable("matricula") String matricula) {
+    public ResponseEntity<AlunoResponseDTO> encontrarPorMatricula(@PathVariable("matricula") String matricula) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(alunoService.encontrarPorMatricula(matricula));
     }
 
-    @GetMapping
-    public ResponseEntity<List<Aluno>> listarTodos() {
+    @GetMapping("/todos")
+    public ResponseEntity<List<AlunoResponseDTO>> listarTodos() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(alunoService.listarTodos());
     }
 
-    @PostMapping
-    public ResponseEntity<Aluno> criar(Aluno data) {
+    @PostMapping("/criar")
+    public ResponseEntity<AlunoResponseDTO> criar(@RequestBody AlunoRequestDTO data) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(alunoService.criar(data));
     }
 
-    @DeleteMapping
-    public ResponseEntity excluir(UUID id) {
+    @DeleteMapping("/excluir/{id}")
+    public ResponseEntity excluir(@PathVariable UUID id) {
         alunoService.excluir(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .build();

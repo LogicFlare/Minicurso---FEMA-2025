@@ -1,6 +1,6 @@
 package com.flare.minicurso_hibernate.repository;
 
-import com.flare.minicurso_hibernate.model.Emprestimo;
+import com.flare.minicurso_hibernate.infra.model.Emprestimo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

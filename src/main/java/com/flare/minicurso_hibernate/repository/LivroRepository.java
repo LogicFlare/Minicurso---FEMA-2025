@@ -1,6 +1,6 @@
 package com.flare.minicurso_hibernate.repository;
 
-import com.flare.minicurso_hibernate.model.Livro;
+import com.flare.minicurso_hibernate.infra.model.Livro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,5 +1,6 @@
-package com.flare.minicurso_hibernate.model;
+package com.flare.minicurso_hibernate.infra.model;
 
+import com.flare.minicurso_hibernate.infra.enumerated.StatusEmprestimo;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -39,4 +40,8 @@ public class Emprestimo {
     private LocalDateTime dataEmprestimo;
 
     private LocalDateTime dataDevolucao;
+
+    @Enumerated(EnumType.STRING)
+    private StatusEmprestimo status = StatusEmprestimo.PENDENTE;
+
 }

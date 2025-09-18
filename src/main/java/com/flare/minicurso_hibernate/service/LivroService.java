@@ -1,6 +1,6 @@
 package com.flare.minicurso_hibernate.service;
 
-import com.flare.minicurso_hibernate.model.Livro;
+import com.flare.minicurso_hibernate.infra.model.Livro;
 import com.flare.minicurso_hibernate.repository.LivroRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

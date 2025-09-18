@@ -1,6 +1,6 @@
 package com.flare.minicurso_hibernate.repository;
 
-import com.flare.minicurso_hibernate.model.Aluno;
+import com.flare.minicurso_hibernate.infra.model.Aluno;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

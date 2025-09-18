@@ -1,4 +1,4 @@
-package com.flare.minicurso_hibernate.model;
+package com.flare.minicurso_hibernate.infra.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,3 +27,4 @@ public class Autor {
     @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
     private List<Livro> livros = new ArrayList<>();
 }
+
