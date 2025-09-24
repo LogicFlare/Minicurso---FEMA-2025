@@ -25,4 +25,16 @@ public interface EmprestimoRepository extends JpaRepository<Emprestimo, UUID> {
             WHERE e.aluno.id = :alunoId
             """)
     List<Emprestimo> findAllByAlunoId(@Param("alunoId") UUID alunoId);
+
+    // nativeQuery = true → indica que estamos usando SQL puro, não JPQL.
+    @Query(value = """
+            SELECT DISTINCT e.* FROM emprestimo e
+            JOIN emprestimo_livros el 
+                ON e.id = el.emprestimo_id
+            JOIN livro l 
+                ON el.livros_id = l.id
+            WHERE e.data_devolucao  < CURRENT_DATE 
+                AND e.status <> 'DEVOLVIDO'
+            """, nativeQuery = true)
+    List<Emprestimo> findAtrasados();
 }
