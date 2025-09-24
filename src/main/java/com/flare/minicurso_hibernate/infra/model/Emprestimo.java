@@ -1,5 +1,6 @@
 package com.flare.minicurso_hibernate.infra.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.flare.minicurso_hibernate.infra.enumerated.StatusEmprestimo;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,8 +25,9 @@ public class Emprestimo {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(name = "aluno_id", nullable = false)
+    @JsonManagedReference
     private Aluno aluno;
 
     @ManyToMany(fetch = FetchType.LAZY) // → carrega os Livros somente quando acessar o atributo.
@@ -34,6 +36,7 @@ public class Emprestimo {
             joinColumns = @JoinColumn(name = "emprestimo_id"),
             inverseJoinColumns = @JoinColumn(name = "livro_id")
     )
+    @JsonManagedReference
     private List<Livro> livros = new ArrayList<>();
 
     @CreationTimestamp

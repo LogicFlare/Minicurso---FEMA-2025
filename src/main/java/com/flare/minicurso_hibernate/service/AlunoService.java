@@ -5,6 +5,7 @@ import com.flare.minicurso_hibernate.infra.dto.aluno.AlunoResponseDTO;
 import com.flare.minicurso_hibernate.infra.model.Aluno;
 import com.flare.minicurso_hibernate.repository.AlunoRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,11 @@ public class AlunoService {
     public AlunoResponseDTO encontrar(UUID id) {
         return AlunoResponseDTO.fromEntity(alunoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado. ID:" + id)));
+    }
+
+    public Aluno encontrarEntidade(UUID id){
+        return alunoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Aluno não encontrado. ID:" + id));
     }
 
     public AlunoResponseDTO encontrarPorMatricula(String matricula) {
@@ -41,7 +47,16 @@ public class AlunoService {
                 .build();
     }
 
-    public void atualizar(UUID uuid, Aluno data) {
+    @Transactional
+    public AlunoResponseDTO atualizar(UUID id, AlunoRequestDTO data) {
+
+        Aluno aluno = encontrarEntidade(id);
+
+        if (data.getMatricula() != null) aluno.setMatricula(data.getMatricula());
+
+        if (data.getNome() != null) aluno.setNome(data.getNome());
+
+        return AlunoResponseDTO.fromEntity(aluno);
     }
 
     public void excluir(UUID id) {

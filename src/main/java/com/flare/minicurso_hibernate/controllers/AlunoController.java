@@ -49,4 +49,10 @@ public class AlunoController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .build();
     }
+
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<AlunoResponseDTO> atualizar(@PathVariable("id") UUID id, @RequestBody AlunoRequestDTO data){
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(alunoService.atualizar(id, data));
+    }
+
 }

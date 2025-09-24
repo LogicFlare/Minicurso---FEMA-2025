@@ -1,5 +1,8 @@
 package com.flare.minicurso_hibernate.controllers;
 
+import com.flare.minicurso_hibernate.infra.dto.livro.LivroEmprestadoRecordDTO;
+import com.flare.minicurso_hibernate.infra.dto.livro.LivroRequestDTO;
+import com.flare.minicurso_hibernate.infra.dto.livro.LivroResponseDTO;
 import com.flare.minicurso_hibernate.infra.model.Livro;
 import com.flare.minicurso_hibernate.service.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +27,13 @@ public class LivroController {
     }
 
     @GetMapping("/titulo/{titulo}")
-    public ResponseEntity<Livro> encontrarPorTitulo(@PathVariable("titulo") String titulo) {
+    public ResponseEntity<LivroResponseDTO> encontrarPorTitulo(@PathVariable("titulo") String titulo) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(livroService.encontrarPorTitulo(titulo));
     }
 
     @GetMapping("/todos")
-    public ResponseEntity<List<Livro>> listarTodos() {
+    public ResponseEntity<List<LivroResponseDTO>> listarTodos() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(livroService.listarTodos());
     }
@@ -42,7 +45,7 @@ public class LivroController {
     }
 
     @PostMapping("/criar")
-    public ResponseEntity<Livro> criar(@RequestBody Livro data) {
+    public ResponseEntity<Livro> criar(@RequestBody LivroRequestDTO data) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(livroService.criar(data));
     }
@@ -53,4 +56,15 @@ public class LivroController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .build();
     }
+
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<LivroResponseDTO> atualizar(@PathVariable("id") UUID id, @RequestBody LivroRequestDTO data){
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(livroService.atualizar(id, data));
+    }
+
+    @GetMapping("/emprestados")
+    public ResponseEntity<List<LivroEmprestadoRecordDTO>> listarLivrosEmprestados(){
+        return ResponseEntity.status(HttpStatus.OK).body(livroService.listarLivrosEmprestados());
+    }
+
 }

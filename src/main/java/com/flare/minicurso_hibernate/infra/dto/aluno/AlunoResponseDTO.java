@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ public class AlunoResponseDTO {
     private String nome;
     private String matricula;
     private List<Emprestimo> emprestimos;
+    private LocalDateTime dataUltimoLivroEmprestado;
 
     public static AlunoResponseDTO fromEntity(Aluno aluno) {
         return AlunoResponseDTO.builder()
@@ -26,6 +28,7 @@ public class AlunoResponseDTO {
                 .nome(aluno.getNome())
                 .matricula(aluno.getMatricula())
                 .emprestimos(aluno.getEmprestimos())
+                .dataUltimoLivroEmprestado(aluno.getDataUltimoLivroEmprestado())
                 .build();
     }
 

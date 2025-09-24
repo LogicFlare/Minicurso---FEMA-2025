@@ -1,5 +1,6 @@
 package com.flare.minicurso_hibernate.controllers;
 
+import com.flare.minicurso_hibernate.infra.dto.emprestimo.EmprestimoRequestDTO;
 import com.flare.minicurso_hibernate.infra.model.Emprestimo;
 import com.flare.minicurso_hibernate.service.EmprestimoService;
 import jakarta.transaction.Transactional;
@@ -56,7 +57,7 @@ public class EmprestimoController {
     }
 
     @PostMapping("/criar")
-    public ResponseEntity<Emprestimo> criar(@RequestBody Emprestimo data) {
+    public ResponseEntity<Emprestimo> criar(@RequestBody EmprestimoRequestDTO data) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(emprestimoService.criar(data));
     }
@@ -67,7 +68,6 @@ public class EmprestimoController {
         return ResponseEntity.status(HttpStatus.OK)
                 .build();
     }
-
 
     @DeleteMapping("/excluir/{id}")
     public ResponseEntity excluir(@PathVariable UUID id) {

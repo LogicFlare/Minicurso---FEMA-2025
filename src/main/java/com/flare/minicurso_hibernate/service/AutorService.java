@@ -1,8 +1,12 @@
 package com.flare.minicurso_hibernate.service;
 
+import com.flare.minicurso_hibernate.infra.dto.autor.AutorRequestDTO;
+import com.flare.minicurso_hibernate.infra.dto.autor.AutorResponseDTO;
 import com.flare.minicurso_hibernate.infra.model.Autor;
 import com.flare.minicurso_hibernate.repository.AutorRepository;
+import com.flare.minicurso_hibernate.repository.EmprestimoRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +18,9 @@ public class AutorService {
 
     @Autowired
     private AutorRepository autorRepository;
+
+    @Autowired
+    private EmprestimoRepository emprestimoRepository;
 
     public Autor encontrar(UUID id) {
         return autorRepository.findById(id)
@@ -29,17 +36,35 @@ public class AutorService {
         return autorRepository.findAll();
     }
 
-    public Autor criar(Autor data) {
+    public Autor criar(AutorRequestDTO data) {
         Autor autor = new Autor().builder()
                 .nome(data.getNome())
                 .build();
         return autorRepository.save(autor);
     }
 
-    public void atualizar(UUID uuid, Autor data) {
+    @Transactional
+    public AutorResponseDTO atualizar(UUID id, AutorRequestDTO data) {
+
+        Autor autor = encontrar(id);
+
+        if (data.getNome() != null) autor.setNome(data.getNome());
+
+        return AutorResponseDTO.fromEntity(autorRepository.save(autor));
     }
 
     public void excluir(UUID id) {
+
+        Autor autor = encontrar(id);
+
+        autor.getLivros().forEach(livro -> {
+            livro.getEmprestimos().forEach(emprestimo -> {
+                emprestimo.getLivros().remove(livro);
+                emprestimoRepository.save(emprestimo);
+            });
+            livro.getEmprestimos().clear();
+        });
+
         autorRepository.deleteById(id);
     }
 }

@@ -1,6 +1,8 @@
 package com.flare.minicurso_hibernate.controllers;
 
 
+import com.flare.minicurso_hibernate.infra.dto.autor.AutorRequestDTO;
+import com.flare.minicurso_hibernate.infra.dto.autor.AutorResponseDTO;
 import com.flare.minicurso_hibernate.infra.model.Autor;
 import com.flare.minicurso_hibernate.service.AutorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,7 @@ public class AutorController {
     }
 
     @PostMapping("/criar")
-    public ResponseEntity<Autor> criar(@RequestBody Autor data) {
+    public ResponseEntity<Autor> criar(@RequestBody AutorRequestDTO data) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(autorService.criar(data));
     }
@@ -48,4 +50,10 @@ public class AutorController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .build();
     }
+
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<AutorResponseDTO> atualizar(@PathVariable("id") UUID id, @RequestBody AutorRequestDTO data){
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(autorService.atualizar(id, data));
+    }
+
 }
