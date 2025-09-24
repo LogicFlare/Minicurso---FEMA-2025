@@ -15,7 +15,7 @@ public interface EmprestimoRepository extends JpaRepository<Emprestimo, UUID> {
     @Query("""
             SELECT DISTINCT e FROM Emprestimo e
             JOIN FETCH e.livros
-            WHERE MONTH(e.dataEmprestimo) =: mes AND YEAR(e.dataEmprestimo) = :ano
+            WHERE MONTH(e.dataEmprestimo) = :mes AND YEAR(e.dataEmprestimo) = :ano
             """)
     List<Emprestimo> findByMesEAno(@Param("mes") int mes, @Param("ano") int ano);
 

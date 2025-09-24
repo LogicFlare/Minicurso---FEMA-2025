@@ -18,14 +18,14 @@ public class LivroResponseDTO {
     UUID id;
     String titulo;
     Autor autor;
-    List<Emprestimo> emprestimos;
+    List<UUID> emprestimosId;
 
     public static LivroResponseDTO fromEntity(Livro livro) {
         return LivroResponseDTO.builder()
                 .id(livro.getId())
                 .titulo(livro.getTitulo())
                 .autor(livro.getAutor())
-                .emprestimos(livro.getEmprestimos())
+                .emprestimosId(livro.getEmprestimos().stream().map(Emprestimo::getId).toList())
                 .build();
     }
 

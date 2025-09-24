@@ -9,7 +9,7 @@ O objetivo é demonstrar como funciona o mapeamento de entidades, a persistênci
 - Java 17+
 - Spring Boot
 - Spring Data JPA (Hibernate como implementação)
-- Banco de dados H2
+- Banco de dados PostgreSQL
 
 ---
 
@@ -54,7 +54,7 @@ O sistema permite gerenciar:
 - **Um Autor** pode ter **muitos Livros** (`@OneToMany`).
 - **Um Livro** pertence a **um Autor** (`@ManyToOne`).
 - **Um Aluno** pode ter **muitos Empréstimos**.
-- **Um Empréstimo** sempre está ligado a **um Livro** e **um Aluno**.
+- **Um Empréstimo** sempre está ligado a **um Aluno** e **um** ou **vários Livros**.
 
 ---
 
@@ -62,22 +62,21 @@ O sistema permite gerenciar:
 1. **Cadastrar autores** → exemplo: "Machado de Assis".
 2. **Cadastrar livros** → exemplo: "Dom Casmurro", vinculado ao autor.
 3. **Cadastrar alunos** → exemplo: "Maria Silva".
-4. **Registrar empréstimo** → "Maria Silva" pegou "Dom Casmurro".
+4. **Registrar empréstimo** → "Maria Silva" pegou ["Pequeno Príncipe", "Dom Casmurro"].
 
 ---
 
-# URL do banco em memória
-spring.datasource.url=jdbc:h2:mem:biblioteca
-spring.datasource.driverClassName=org.h2.Driver
-spring.datasource.username=sa
-spring.datasource.password=
-
-# Console web do H2
-spring.h2.console.enabled=true
-spring.h2.console.path=/h2-console
+# URL da documentação (SWAGGER)
+http://localhost:8080/api/swagger-ui/index.html
 
 # JPA / Hibernate
-spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
-spring.jpa.show-sql=true
+spring.datasource.url=jdbc:postgresql://localhost:5432/biblioteca_minicurso
+spring.datasource.username=postgres
+spring.datasource.password=fema
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+server.servlet.context-path=/api
 spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
 
