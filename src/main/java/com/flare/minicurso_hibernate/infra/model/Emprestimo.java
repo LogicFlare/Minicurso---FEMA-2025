@@ -30,7 +30,7 @@ public class Emprestimo {
     @JsonManagedReference
     private Aluno aluno;
 
-    @ManyToMany(fetch = FetchType.LAZY) // → carrega os Livros somente quando acessar o atributo.
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "emprestimo_livros",
             joinColumns = @JoinColumn(name = "emprestimo_id"),

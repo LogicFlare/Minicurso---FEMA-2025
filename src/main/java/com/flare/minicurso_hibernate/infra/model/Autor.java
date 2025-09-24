@@ -27,8 +27,6 @@ public class Autor {
 
     @OneToMany(mappedBy = "autor", cascade = CascadeType.REMOVE)
     @JsonManagedReference
-    // Tanto essa anotação quanto a do livro sao do jackson para resolver referências circulares de forma controlada
-    // Lado "pai" usa essa anotação  permitindo a serialização normal da propriedade
     private List<Livro> livros = new ArrayList<>();
 }
 

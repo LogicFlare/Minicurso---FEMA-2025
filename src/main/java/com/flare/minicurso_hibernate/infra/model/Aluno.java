@@ -32,8 +32,8 @@ public class Aluno {
     private String matricula;
 
     @OneToMany(
-            mappedBy = "aluno", // → indica que o lado proprietário do relacionamento é o campo aluno da classe Emprestimo.
-            cascade = CascadeType.ALL // → ajudam a gerenciar persistência e remoção automática.
+            mappedBy = "aluno",
+            cascade = CascadeType.ALL
     )
     @JsonBackReference
     private List<Emprestimo> emprestimos = new ArrayList<>();
