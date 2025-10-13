@@ -1,4 +1,64 @@
 services:
+
+
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-biblioteca
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=biblioteca_minicurso
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - monitoring
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - monitoring
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  api-biblioteca:
+    container_name: api-biblioteca
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - monitoring
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=biblioteca_minicurso
+      - DB_USER=postgres
+      - DB_PASSWORD=root
+      - MANAGEMENT_ENDPOINTS_GRAFANA=health,info,prometheus,metrics
+
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -8,8 +68,6 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
       - monitoring
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     restart: unless-stopped
 
   grafana:
@@ -34,3 +92,5 @@ networks:
 
 volumes:
   grafana-storage:
+  postgres-data:
+  pgadmin-data:

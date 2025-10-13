@@ -5,9 +5,10 @@ import com.flare.minicurso_hibernate.infra.dto.aluno.AlunoResponseDTO;
 import com.flare.minicurso_hibernate.infra.model.Aluno;
 import com.flare.minicurso_hibernate.repository.AlunoRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -47,10 +48,26 @@ public class AlunoService {
                 .build();
     }
 
-    @Transactional
+    // mesmo se o método principal falhar, esse é executado.
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void logarOperacao(String aluno, String operacao) {
+        System.out.println("Aluno: " + aluno + " - Operação: " + operacao + ". Log salvo mesmo com falha no método principal.");
+
+    }
+
+    @Transactional(
+            timeout = 10,
+            rollbackFor = Exception.class
+    )
     public AlunoResponseDTO atualizar(UUID id, AlunoRequestDTO data) {
 
+        System.out.println("Executado antes de encontrar a entidade");
+
         Aluno aluno = encontrarEntidade(id);
+
+        System.out.println("Se encontrou, vai executar! ");
+
+        logarOperacao(data.getNome(), "Atualização de dados");
 
         if (data.getMatricula() != null) aluno.setMatricula(data.getMatricula());
 
