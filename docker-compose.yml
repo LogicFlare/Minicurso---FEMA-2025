@@ -1,6 +1,18 @@
 services:
 
-
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api-biblioteca
+      - grafana
+      - prometheus
+    networks:
+      - monitoring
 
   postgres:
     image: postgres:15-alpine
