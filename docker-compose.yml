@@ -81,8 +81,8 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--web.external-url=/prometheus'
-      - '--web.route-prefix=/'
+      - '--web.external-url=http://localhost/prometheus'
+      - '--web.route-prefix=/prometheus'
     networks:
       - monitoring
     restart: unless-stopped
@@ -94,9 +94,8 @@ services:
       - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_SERVER_ROOT_URL=http://3.93.43.187/grafana/
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s/grafana/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
-      - GF_SERVER_DOMAIN=3.93.43.187
     depends_on:
       - prometheus
     networks:
