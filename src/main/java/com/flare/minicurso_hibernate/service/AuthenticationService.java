@@ -1,10 +1,11 @@
 package com.flare.minicurso_hibernate.service;
 
+import com.flare.minicurso_hibernate.config.security.JwtService;
 import com.flare.minicurso_hibernate.infra.dto.auth.LoginRequestDTO;
 import com.flare.minicurso_hibernate.infra.dto.auth.LoginResponseDTO;
 import com.flare.minicurso_hibernate.infra.dto.auth.RegisterRequestDTO;
 import com.flare.minicurso_hibernate.infra.model.Usuario;
-import com.flare.minicurso_hibernate.repository.UsuarioRepository;
+import com.flare.minicurso_hibernate.infra.repository.UsuarioRepository;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;

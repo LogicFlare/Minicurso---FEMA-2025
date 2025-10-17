@@ -5,8 +5,10 @@ import com.flare.minicurso_hibernate.infra.dto.livro.LivroRequestDTO;
 import com.flare.minicurso_hibernate.infra.dto.livro.LivroResponseDTO;
 import com.flare.minicurso_hibernate.infra.model.Autor;
 import com.flare.minicurso_hibernate.infra.model.Livro;
-import com.flare.minicurso_hibernate.repository.LivroRepository;
+import com.flare.minicurso_hibernate.infra.repository.LivroRepository;
+import com.flare.minicurso_hibernate.service.metrics.MetricsService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,8 @@ public class LivroService {
 
     @Autowired
     private LivroRepository livroRepository;
+    @Autowired
+    MetricsService metricsService;
 
     @Autowired
     private AutorService autorService;
@@ -47,16 +51,30 @@ public class LivroService {
         return livroRepository.findAllByAutorNome(nomeAutor);
     }
 
-    public Livro criar(LivroRequestDTO data) {
+    public Livro criar(LivroRequestDTO data, HttpServletRequest request) {
+        long inicio = System.currentTimeMillis();
+        try {
+            Autor autor = autorService.encontrar(data.getAutor());
 
-        Autor autor = autorService.encontrar(data.getAutor());
+            Livro livro = Livro.builder()
+                    .titulo(data.getTitulo())
+                    .autor(autor)
+                    .build();
 
-        Livro livro = new Livro().builder()
-                .titulo(data.getTitulo())
-                .autor(autor)
-                .build();
-        return livroRepository.save(livro);
+            Livro livroSalvo = livroRepository.save(livro);
+
+            metricsService.registrarOperacao("criar_livro");
+            return livroSalvo;
+        } catch (Exception e) {
+            System.err.println("Erro ao criar livro: " + e.getMessage());
+            e.printStackTrace();
+            metricsService.registrarErro("erro_criar_livro");
+            throw e;
+        } finally {
+            metricsService.registrarTempoOperacao("tempo_criar_livro", System.currentTimeMillis() - inicio);
+        }
     }
+
 
     @Transactional
     public LivroResponseDTO atualizar(UUID id, LivroRequestDTO data) {

@@ -1,4 +1,4 @@
-package com.flare.minicurso_hibernate.service;
+package com.flare.minicurso_hibernate.config.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

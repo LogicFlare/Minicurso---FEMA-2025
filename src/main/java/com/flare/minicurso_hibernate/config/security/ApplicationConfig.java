@@ -1,6 +1,6 @@
-package com.flare.minicurso_hibernate.config;
+package com.flare.minicurso_hibernate.config.security;
 
-import com.flare.minicurso_hibernate.repository.UsuarioRepository;
+import com.flare.minicurso_hibernate.infra.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

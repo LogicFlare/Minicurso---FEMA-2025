@@ -5,6 +5,7 @@ import com.flare.minicurso_hibernate.infra.dto.livro.LivroRequestDTO;
 import com.flare.minicurso_hibernate.infra.dto.livro.LivroResponseDTO;
 import com.flare.minicurso_hibernate.infra.model.Livro;
 import com.flare.minicurso_hibernate.service.LivroService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,10 +45,10 @@ public class LivroController {
                 .body(livroService.listarTodosPorAutor(nomeAutor));
     }
 
-    @PostMapping("/criar")
-    public ResponseEntity<Livro> criar(@RequestBody LivroRequestDTO data) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(livroService.criar(data));
+    @PostMapping
+    public ResponseEntity<Livro> criar(@RequestBody LivroRequestDTO data, HttpServletRequest request) {
+        Livro livro = livroService.criar(data, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(livro);
     }
 
     @DeleteMapping("/{id}")

@@ -1,4 +1,4 @@
-package com.flare.minicurso_hibernate.config;
+package com.flare.minicurso_hibernate.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +21,22 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
 
+    private static final String[] PUBLIC_ENDPOINTS = {
+            "/auth/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/actuator/**"
+    };
+
+    private static final String[] ADMIN_ENDPOINTS = {
+            "/aluno/**",
+            "/autor/**",
+            "/livro/**",
+            "/emprestimo/**"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -28,15 +44,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Endpoints publicos
                         .requestMatchers(
-                                "/auth/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/v3/api-docs/**",
-                                "/swagger-resources/**",
-                                "/actuator/**"
+                                PUBLIC_ENDPOINTS
                         ).permitAll()
                         // Endpoints que requerem ADMIN
-                        .requestMatchers("/alunos/delete/**", "/autores/delete/**", "/livros/delete/**").hasRole("ADMIN")
+                        .requestMatchers(
+                                ADMIN_ENDPOINTS
+                        ).hasRole("ADMIN")
                         // Demais endpoints requerem autenticacao
                         .anyRequest().authenticated()
                 )

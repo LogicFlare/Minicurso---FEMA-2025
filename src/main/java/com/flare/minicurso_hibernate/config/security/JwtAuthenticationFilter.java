@@ -1,6 +1,5 @@
-package com.flare.minicurso_hibernate.config;
+package com.flare.minicurso_hibernate.config.security;
 
-import com.flare.minicurso_hibernate.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

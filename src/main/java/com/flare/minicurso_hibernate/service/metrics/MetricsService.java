@@ -46,4 +46,16 @@ public class MetricsService {
                 .register(meterRegistry)
                 .record(tempoMs, TimeUnit.MILLISECONDS);
     }
+
+    public void registrarOperacaoComLocalizacao(String tipo, String pais, String latitude, String longitude) {
+        Counter.builder("operacoes_geolocalizadas")
+                .tag("tipo", tipo)
+                .tag("pais", pais)
+                .tag("latitude", latitude)
+                .tag("longitude", longitude)
+                .description("Operações com dados de geolocalização")
+                .register(meterRegistry)
+                .increment();
+    }
+
 }

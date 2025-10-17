@@ -3,7 +3,7 @@ package com.flare.minicurso_hibernate.service;
 import com.flare.minicurso_hibernate.infra.dto.aluno.AlunoRequestDTO;
 import com.flare.minicurso_hibernate.infra.dto.aluno.AlunoResponseDTO;
 import com.flare.minicurso_hibernate.infra.model.Aluno;
-import com.flare.minicurso_hibernate.repository.AlunoRepository;
+import com.flare.minicurso_hibernate.infra.repository.AlunoRepository;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.persistence.EntityNotFoundException;
@@ -61,7 +61,7 @@ public class AlunoService {
 
     @Cacheable(value = "alunos-all-search",
             key = "'all'",
-            unless = "#result.size() == 0", condition = "#result.size() < 5")
+            condition = "#result.size() < 5")
     public List<AlunoResponseDTO> listarTodos() {
         return AlunoResponseDTO.fromEntities(alunoRepository.findAll());
     }

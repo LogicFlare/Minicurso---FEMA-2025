@@ -1,4 +1,4 @@
-package com.flare.minicurso_hibernate.repository;
+package com.flare.minicurso_hibernate.infra.repository;
 
 import com.flare.minicurso_hibernate.infra.model.Emprestimo;
 import org.springframework.data.jpa.repository.JpaRepository;

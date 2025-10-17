@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
         in = SecuritySchemeIn.HEADER
 )
 @OpenAPIDefinition(
-        info = @Info(title = "MINI CURSO FEMA", version = "1.0.0"),
+        info = @Info(title = "BIBLIOTECA API", version = "1.0.0"),
         security = {
                 @SecurityRequirement(name = "tokenAuth")
         }

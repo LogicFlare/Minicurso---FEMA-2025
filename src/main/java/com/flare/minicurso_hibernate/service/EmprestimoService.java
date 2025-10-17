@@ -5,7 +5,8 @@ import com.flare.minicurso_hibernate.infra.enumerated.StatusEmprestimo;
 import com.flare.minicurso_hibernate.infra.model.Aluno;
 import com.flare.minicurso_hibernate.infra.model.Emprestimo;
 import com.flare.minicurso_hibernate.infra.model.Livro;
-import com.flare.minicurso_hibernate.repository.EmprestimoRepository;
+import com.flare.minicurso_hibernate.infra.repository.EmprestimoRepository;
+import com.flare.minicurso_hibernate.service.metrics.MetricsService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -23,6 +24,10 @@ public class EmprestimoService {
 
     @Autowired
     private EmprestimoRepository emprestimoRepository;
+
+    @Autowired
+    @Lazy
+    private MetricsService metricsService;
 
     @Autowired
     @Lazy
@@ -46,23 +51,33 @@ public class EmprestimoService {
     }
 
     public Emprestimo criar(EmprestimoRequestDTO data) {
+        Long inicio = System.currentTimeMillis();
+       try {
+           Aluno aluno = alunoService.encontrarEntidade(data.getAlunoId());
 
-        Aluno aluno = alunoService.encontrarEntidade(data.getAlunoId());
+           aluno.setDataUltimoLivroEmprestado(LocalDateTime.now());
 
-        aluno.setDataUltimoLivroEmprestado(LocalDateTime.now());
+           List<Livro> livros = data.getLivroIds().stream()
+                   .map(livroService::encontrar)
+                   .toList();
 
-        List<Livro> livros = data.getLivroIds().stream()
-                .map(livroService::encontrar)
-                .toList();
+           Emprestimo emprestimo = new Emprestimo().builder()
+                   .aluno(aluno)
+                   .livros(livros)
+                   .dataEmprestimo(null)
+                   .dataDevolucao(null)
+                   .status(StatusEmprestimo.PENDENTE)
+                   .build();
 
-        Emprestimo emprestimo = new Emprestimo().builder()
-                .aluno(aluno)
-                .livros(livros)
-                .dataEmprestimo(null)
-                .dataDevolucao(null)
-                .status(StatusEmprestimo.PENDENTE)
-                .build();
-        return emprestimoRepository.save(emprestimo);
+           metricsService.registrarOperacao("criar_emprestimo");
+
+           return emprestimoRepository.save(emprestimo);
+       } catch (Exception e) {
+           metricsService.registrarErro("erro_criar_emprestimo");
+           throw e;
+       } finally {
+           metricsService.registrarTempoOperacao("tempo_criar_emprestimo", System.currentTimeMillis() - inicio);
+       }
     }
 
     public void excluir(UUID id) {
